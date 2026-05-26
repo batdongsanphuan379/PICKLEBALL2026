@@ -1,0 +1,6 @@
+{
+  "name": "Johnny Trí Pickleball - Chiêu Sinh Lớp Hè",
+  "description": "Trang đăng ký học Pickleball hè 2026 - Huấn luyện viên Johnny Trí. Trải nghiệm lớp học vui, khỏe mạnh, kỹ thuật bài bản và bứt phá giới hạn.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

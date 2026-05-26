@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // Robust workaround for environments like iframe sandboxes where window.fetch is a read-only getter.
+      // We implement a fallback chain (window -> Window.prototype -> parent prototypes) defining 
+      // both a getter and a setter. This allows polyfills to safely assign to global.fetch / window.fetch
+      // without triggering the "Cannot set property fetch of #<Window> which has only a getter" TypeError.
+      try {
+        if (typeof window !== 'undefined' && window.fetch) {
+          let currentFetch = window.fetch;
+          
+          const descriptor = {
+            get() {
+              return currentFetch;
+            },
+            set(value) {
+              currentFetch = value;
+            },
+            configurable: true,
+            enumerable: true
+          };
+
+          const makeWritable = (target) => {
+            Object.defineProperty(target, 'fetch', descriptor);
+          };
+
+          try {
+            makeWritable(window);
+          } catch (e1) {
+            try {
+              makeWritable(Window.prototype);
+            } catch (e2) {
+              try {
+                makeWritable(Object.getPrototypeOf(window));
+              } catch (e3) {
+                console.warn('Unable to intercept window.fetch via prototype chain:', e3);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Unable to prepare window.fetch descriptor:', err);
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
